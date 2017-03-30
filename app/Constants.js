@@ -2,7 +2,7 @@
  * Created by sp41mer on 18.03.17.
  */
 
-export const url = 'http://0.0.0.0:8000';
+export const url = 'http://172.20.10.5:8000';
 
 export const loginUrl = '';
 
