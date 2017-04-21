@@ -46,12 +46,52 @@ class PrizeList extends Component {
         }).done(() => {
                 if (this.state.token) {
                     this.getPrizes();
+                    this.getUserInfo();
                 }
             }
         );
-        AsyncStorage.getItem("user").then((value)=>{
-            this.setState({user: JSON.parse(value)});
-        });
+    }
+
+    async getUserInfo() {
+        try {
+            let response = await fetch(`${Constants.url}/me/`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': this.state.token
+                }
+            });
+            const responseJson = await response.json();
+            this.setState({
+                isLoading: false,
+            });
+            if (responseJson.error) {
+                this.setState({
+                    message: responseJson.error
+                });
+            }
+            else {
+                if (responseJson.type!=1){
+                    this.setState({
+                        isLoading: false,
+                        message: 'Вы авторизовались взрослым'
+                    });
+                }
+                else {
+                    this.setState({
+                        user: responseJson
+                    })
+                }
+            }
+        } catch (error) {
+                this.setState({
+                    isLoading: false,
+                    message: 'Произошла ошибка' + error
+                });
+
+        }
+
     }
 
 
