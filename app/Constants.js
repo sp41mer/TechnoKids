@@ -2,7 +2,7 @@
  * Created by sp41mer on 18.03.17.
  */
 
-export const url = 'http://172.20.10.5:8000';
+export const url = 'http://78.155.219.128:8888';
 
 export const loginUrl = '';
 
@@ -13,6 +13,13 @@ export const tasksUrl = '';
 export const taskTypePictures = {
  1: require('./Resources/type_house.png')
 };
+
+export const taskMessagesToKid = {
+    0: '',
+    1: '(ждем...)',
+    2: '(готово)'
+};
+
 export const userDefaultPictures = {
     'boy': require('./Resources/boy_default.png'),
     'girl': require('./Resources/boy_default.png'),

@@ -109,7 +109,7 @@ class TaskList extends Component{
                         />
                     </Left>
                     <Body>
-                    <Text>{rowData.title} {rowData.status}</Text>
+                    <Text>{rowData.title} {Constants.taskMessagesToKid[rowData.status]}</Text>
                     <Text note>{rowData.type_info.name}</Text>
                     <Text>
                         {rowData.cost}
@@ -158,6 +158,10 @@ class TaskList extends Component{
                         <Button active>
                             <Icon name="apps" />
                             <Text>Задачки</Text>
+                        </Button>
+                        <Button onPress={()=>Actions.stats_list()}>
+                            <Icon name="apps"/>
+                            <Text>Статистика</Text>
                         </Button>
                     </FooterTab>
                 </Footer>

@@ -8,6 +8,7 @@ import LoginPage from './LoginPage';
 import TaskList from './TaskList';
 import TaskDetails from './TaskDetails';
 import PrizeList from './PrizeList';
+import StatsList from './Statistics'
 
 const App = () => {
     return (
@@ -30,6 +31,10 @@ const App = () => {
                     key="prize_list"
                     direction='leftToRight'
                     component={PrizeList}>
+                </Scene>
+                <Scene
+                    key="stats_list"
+                    component={StatsList}>
                 </Scene>
             </Scene>
         </Router>

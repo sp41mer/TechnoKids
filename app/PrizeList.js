@@ -89,9 +89,35 @@ class PrizeList extends Component {
     }
 
     calculateProgress(cost, balance){
-        coef = balance/cost;
+        let coef = balance/cost;
         coef > 1 ? coef = 1: coef = coef;
         return coef;
+    }
+
+    isPrizeUnable(cost, balance){
+        let coef = balance/cost;
+        return (coef < 1);
+    }
+
+    isAnimatable(cost, balance){
+        let coef = balance/cost;
+        debugger;
+        if (coef < 1){
+            return null;
+        }
+        else{
+            return "pulse"
+        }
+    }
+
+    buttonGetColor(cost, balance){
+        let coef = balance/cost;
+        if (coef < 1){
+            return "gray";
+        }
+        else{
+            return "green"
+        }
     }
 
     async takePrize(id) {
@@ -127,7 +153,6 @@ class PrizeList extends Component {
     }
 
     dropPrize(key, cost){
-
         this.setState({
             isModalVisible: false,
         });
@@ -153,9 +178,12 @@ class PrizeList extends Component {
                                 <View key={key} style={{alignItems:'center'}}>
                                     <View style = {{zIndex: 0, alignItems:'center'}}>
                                     <Text>
-                                        {item.name+item.id}
+                                        {item.name}
                                     </Text>
                                     <Progress.Bar progress={this.calculateProgress(item.cost, this.state.user.balance)} width={160} height={10} />
+                                        <Text>
+                                            {this.state.user.balance}/{item.cost}
+                                        </Text>
                                     <Animatable.Image animation="pulse" easing="ease-out" iterationCount="infinite"
                                         source={require('./Resources/type_house.png')}
                                         style={{borderRadius: 90,width: 180, height: 180, marginTop: 10, borderWidth: 1.5}}
@@ -163,8 +191,8 @@ class PrizeList extends Component {
                                     <Text style={{marginTop: 10}}>
                                         {item.description}
                                     </Text>
-                                    <Button rounded success large
-                                            style={{alignSelf: 'center', marginTop: 20}}
+                                    <Button rounded success large disabled={this.isPrizeUnable(item.cost, this.state.user.balance)}
+                                            style={{alignSelf: 'center', marginTop: 20, backgroundColor: this.buttonGetColor(item.cost, this.state.user.balance)}}
                                             onPress={()=>this.takePrize(item.id, this)}>
                                         <Text>
                                             Забрать !
@@ -220,6 +248,10 @@ class PrizeList extends Component {
                         <Button onPress={()=>Actions.task_list()}>
                             <Icon name="apps"/>
                             <Text>Задачки</Text>
+                        </Button>
+                        <Button onPress={()=>Actions.stats_list()}>
+                            <Icon name="apps"/>
+                            <Text>Статистика</Text>
                         </Button>
                     </FooterTab>
                 </Footer>
