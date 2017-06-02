@@ -1,21 +1,11 @@
 /**
- * Created by sp41mer on 16.03.17.
+ * Created by sp41mer on 01.06.17.
  */
-import React, { Component } from 'react';
-import {
-    StyleSheet,
-    View,
-    AsyncStorage,
-    ListView,
-    TouchableHighlight,
-    ActivityIndicator
-} from 'react-native';
+import React, {Component} from "react";
+import {StyleSheet, View, AsyncStorage, ListView, TouchableHighlight, ActivityIndicator, Platform} from "react-native";
 import {
     Container,
     Content,
-    Form,
-    Item,
-    Input,
     Header,
     Title,
     Left,
@@ -27,21 +17,20 @@ import {
     Text,
     Icon,
     ListItem,
-    Thumbnail,
-    List
+    Thumbnail
 } from "native-base";
 import {Actions} from "react-native-router-flux";
 const Constants = require('./Constants');
 
-class TaskList extends Component{
+class Dnevnik extends Component{
 
     constructor(props) {
         super(props);
         this.state = {
             isLoading: false,
             message: '',
-            tasks: [],
-            dataTasks: ''
+            marks: [],
+            dataMarks: ''
         }
     }
 
@@ -50,15 +39,15 @@ class TaskList extends Component{
             this.setState({"token": value});
         }).done(() => {
                 if (this.state.token) {
-                    this.getUserTasks();
+                    this.getUserMarks();
                 }
             }
         );
     }
 
-    async getUserTasks() {
+    async getUserMarks() {
         try {
-            let response = await fetch(`${Constants.url}/tasks/`, {
+            let response = await fetch(`${Constants.dnevnikUrl}id=${Constants.giveIdForKid(Constants.user_id)}&days=20170501-20170507`, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -66,19 +55,18 @@ class TaskList extends Component{
                     'Authorization': this.state.token
                 }
             });
-            const responseJson = await response.json();
+            const responseJson = JSON.parse(response._bodyText);
             if (responseJson.error) {
                 this.setState({
                     message: responseJson.error
                 });
             }
             else {
-                let list_tasks = responseJson[0].tasks;
-                Constants.user_id = list_tasks[0].supplier;
+                let list_marks = responseJson;
                 let dataSource = new ListView.DataSource(
                     {rowHasChanged: (r1, r2) => r1.id !== r2.id});
-                this.setState({dataTasks: dataSource.cloneWithRows(list_tasks)});
-                console.log(this.state.tasks);
+                this.setState({dataMarks: dataSource.cloneWithRows(list_marks)});
+                console.log(this.state.dataMarks);
             }
         }
         catch (error) {
@@ -91,41 +79,26 @@ class TaskList extends Component{
 
     renderRow(rowData, sectionID, rowID) {
         return (
-                <ListItem thumbnail button
-                          onPress={()=>this.onClickRow(rowData, rowID, this.props.tasks_list)}>
-                    <Left>
-                        <Thumbnail source = {Constants.getDefaultAvatar(rowData.customer_info)}
-                                   circular={true}
-                                   borderRadius = {50}
-                                   marginRight = {-20}
-                                   borderWidth={1.5}
-                                   zIndex = {2}
-                        />
-                        <Thumbnail source = {Constants.getDefaultTaskType(rowData.type_info)}
-                                   circular={true}
-                                   borderRadius = {50}
-                                   borderWidth={1.5}
-                                   zIndex = {1}
-                        />
-                    </Left>
-                    <Body>
-                    <Text>{rowData.title} {Constants.taskMessagesToKid[rowData.status]}</Text>
-                    <Text note>{rowData.type_info.name}</Text>
-                    <Text>
-                        {rowData.cost}
-                    </Text>
-                    </Body>
-                </ListItem>
+            <ListItem thumbnail button>
+                <Left>
+                    <Thumbnail source = {Constants.getMarkPicture(rowData.mark)}
+                               circular={true}
+                               borderRadius = {70}
+                               borderWidth={1.5}
+                               zIndex = {2}
+                    />
+                </Left>
+                <Body>
+                <Text>{rowData.name}</Text>
+                {rowData.mark == 'н' ? <Text note> Прогул </Text>: <Text note>Оценка: {rowData.mark}</Text> }
+                <Text>
+                    <Icon name="star" style={{fontSize:15, color: '#ff21da'}}/> {rowData.count}
+                    {rowData.mark != 'н' ? rowData.add ? <Icon name="arrow-up" style={{fontSize:15, color: '#11AF2C', marginLeft: 5}}/> :
+                            <Icon name="arrow-down" style={{fontSize:15, color: '#ac1a1c'}}/> : false}
+                </Text>
+                </Body>
+            </ListItem>
         );
-    }
-
-    onClickRow(rowData, rowID, allTasks){
-        console.log(rowData);
-        Actions.task_details({
-            task: rowData,
-            id: rowID,
-            tasks: allTasks,
-        });
     }
 
     render(){
@@ -134,7 +107,7 @@ class TaskList extends Component{
                 <Header>
                     <Left/>
                     <Body>
-                    <Title>Мои задачки</Title>
+                    <Title>Дневник</Title>
                     </Body>
                     <Right/>
                 </Header>
@@ -142,20 +115,20 @@ class TaskList extends Component{
                     <Text>
                         {this.state.message}
                     </Text>
-                    {this.state.dataTasks ? <ListView
-                            dataSource={this.state.dataTasks}
+                    {this.state.dataMarks ? <ListView
+                            dataSource={this.state.dataMarks}
                             renderRow={this.renderRow.bind(this)}
                         />: <ActivityIndicator
                             size='large'
                             color="#549fff"/>  }
-                    </Content>
+                </Content>
                 <Footer >
                     <FooterTab>
                         <Button onPress={()=>Actions.prize_list()}>
                             <Icon name="camera"/>
                             <Text style={{fontSize: 10}}>Призы</Text>
                         </Button>
-                        <Button active>
+                        <Button>
                             <Icon name="apps" />
                             <Text style={{fontSize: 10}}>Задачки</Text>
                         </Button>
@@ -163,7 +136,7 @@ class TaskList extends Component{
                             <Icon name="apps"/>
                             <Text style={{fontSize: 10}}>Статистика</Text>
                         </Button>
-                        <Button onPress={()=>Actions.dnevnik()}>
+                        <Button active>
                             <Icon name="ios-school"/>
                             <Text style={{fontSize: 10}}>Дневник</Text>
                         </Button>
@@ -174,4 +147,4 @@ class TaskList extends Component{
     }
 }
 
-export default TaskList;
+export default Dnevnik;

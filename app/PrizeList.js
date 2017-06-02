@@ -283,15 +283,19 @@ class PrizeList extends Component {
                     <FooterTab>
                         <Button active>
                             <Icon name="camera"/>
-                            <Text>Призы</Text>
+                            <Text style={{fontSize: 10}}>Призы</Text>
                         </Button>
                         <Button onPress={()=>Actions.task_list()}>
                             <Icon name="apps"/>
-                            <Text>Задачки</Text>
+                            <Text style={{fontSize: 10}}>Задачки</Text>
                         </Button>
                         <Button onPress={()=>Actions.stats_list()}>
                             <Icon name="apps"/>
-                            <Text>Статистика</Text>
+                            <Text style={{fontSize: 10}}>Статистика</Text>
+                        </Button>
+                        <Button onPress={()=>Actions.dnevnik()}>
+                            <Icon name="ios-school"/>
+                            <Text style={{fontSize: 10}}>Дневник</Text>
                         </Button>
                     </FooterTab>
                 </Footer>

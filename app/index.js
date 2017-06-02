@@ -8,7 +8,8 @@ import LoginPage from './LoginPage';
 import TaskList from './TaskList';
 import TaskDetails from './TaskDetails';
 import PrizeList from './PrizeList';
-import StatsList from './Statistics'
+import StatsList from './Statistics';
+import Dnevnik from './Dnevnik';
 
 const App = () => {
     return (
@@ -35,6 +36,9 @@ const App = () => {
                 <Scene
                     key="stats_list"
                     component={StatsList}>
+                </Scene>
+                <Scene key="dnevnik"
+                       component={Dnevnik}>
                 </Scene>
             </Scene>
         </Router>

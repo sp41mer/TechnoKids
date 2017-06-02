@@ -4,6 +4,15 @@
 
 export const url = 'http://78.155.219.128:8888';
 
+export const dnevnikUrl = 'http://78.155.219.128:8070/eljur/marks?';
+
+export let user_id = 0;
+
+export function giveIdForKid(user_id){
+    if (user_id == 2) return 1;
+    else return 2;
+}
+
 export const loginUrl = '';
 
 export const logoutUrl = '';
@@ -18,6 +27,14 @@ export const taskMessagesToKid = {
     0: '',
     1: '(ждем...)',
     2: '(готово)'
+};
+
+export const marksPictures = {
+    '5': require('./Resources/five.png'),
+    '4': require('./Resources/four.png'),
+    '3': require('./Resources/three.png'),
+    '2': require('./Resources/two.png'),
+    'н': require('./Resources/progul.png'),
 };
 
 export const userDefaultPictures = {
@@ -44,4 +61,8 @@ export function getDefaultAvatar(profile) {
 
 export function getDefaultTaskType(type) {
     return taskTypePictures[type.id]
+}
+
+export function getMarkPicture(mark){
+    return marksPictures[mark];
 }
