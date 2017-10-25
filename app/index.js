@@ -21,6 +21,7 @@ const App = () => {
                        hideNavBar={true}
                 />
                 <Scene key="task_list"
+                       direction='vertical'
                        component={TaskList}
                 >
                 </Scene>
@@ -35,6 +36,7 @@ const App = () => {
                 </Scene>
                 <Scene
                     key="stats_list"
+                    direction='vertical'
                     component={StatsList}>
                 </Scene>
                 <Scene key="dnevnik"
